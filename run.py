@@ -34,30 +34,18 @@ train_dataset = load_dataset("stingning/ultrachat", split="train[:1%]")
 
 from transformers import TrainingArguments
 
-output_dir = f"/tmp/llama-7b-qlora-ultrachat"
-per_device_train_batch_size = 4
-gradient_accumulation_steps = 4
-optim = "paged_adamw_32bit"
-save_steps = 10
-logging_steps = 1
-learning_rate = 2e-4
-max_grad_norm = 0.3
-max_steps = 30
-warmup_ratio = 0.03
-lr_scheduler_type = "constant"
-
 training_arguments = TrainingArguments(
-    output_dir=output_dir,
-    per_device_train_batch_size=per_device_train_batch_size,
-    gradient_accumulation_steps=gradient_accumulation_steps,
-    optim=optim,
-    save_steps=save_steps,
-    logging_steps=logging_steps,
-    learning_rate=learning_rate,
-    max_grad_norm=max_grad_norm,
-    max_steps=max_steps,
-    warmup_ratio=warmup_ratio,
-    lr_scheduler_type=lr_scheduler_type,
+    output_dir="/tmp/llama-7b-qlora-ultrachat",
+    per_device_train_batch_size=4,
+    gradient_accumulation_steps=4,
+    optim="paged_adamw_32bit",
+    save_steps=10,
+    logging_steps=1,
+    learning_rate=2e-4,
+    max_grad_norm=0.3,
+    max_steps=30,
+    warmup_ratio=0.03,
+    lr_scheduler_type="constant",
     gradient_checkpointing=True,
     report_to="none",
 )
