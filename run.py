@@ -46,7 +46,7 @@ training_arguments = TrainingArguments(
     warmup_ratio=0.03,
     lr_scheduler_type="constant",
     gradient_checkpointing=True,
-    report_to="none",
+    report_to="none",  # report_to="wandb"
 )
 
 
