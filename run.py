@@ -1,9 +1,12 @@
 import torch
 from transformers import AutoTokenizer, AutoModelForCausalLM, BitsAndBytesConfig
 from peft import LoraConfig
+from datasets import load_dataset
+from transformers import TrainingArguments
+from trl import SFTTrainer
 
-# Load the 7b llama model
-model_id = "meta-llama/Llama-2-7b-hf"
+# Load the 7b mistral model
+model_id = "mistralai/Mistral-7B-v0.1"
 
 quantization_config = BitsAndBytesConfig(
     load_in_4bit=True,
@@ -28,12 +31,8 @@ lora_config = LoraConfig(
 
 model.add_adapter(lora_config)
 
-from datasets import load_dataset
-
 train_dataset = load_dataset("stingning/ultrachat", split="train[:1%]")
-
-from transformers import TrainingArguments
-
+# noinspection PyTypeChecker
 training_arguments = TrainingArguments(
     output_dir="/tmp/llama-7b-qlora-ultrachat",
     per_device_train_batch_size=4,
@@ -50,14 +49,13 @@ training_arguments = TrainingArguments(
     report_to="none",
 )
 
-from trl import SFTTrainer
-
 
 def formatting_func(example):
     text = f"### USER: {example['data'][0]}\n### ASSISTANT: {example['data'][1]}"
     return text
 
 
+# noinspection PyTypeChecker
 trainer = SFTTrainer(
     model=model,
     args=training_arguments,
@@ -68,5 +66,4 @@ trainer = SFTTrainer(
     max_seq_length=1024,
     formatting_func=formatting_func,
 )
-
 trainer.train()

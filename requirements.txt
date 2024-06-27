@@ -5,5 +5,4 @@ datasets
 bitsandbytes
 trl
 accelerate
-scipy
 wandb
