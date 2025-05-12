@@ -37,9 +37,16 @@ train_dataset = load_dataset("stingning/ultrachat", split="train[:1%]")
 training_arguments = SFTConfig(
     output_dir="./outputs",
     per_device_train_batch_size=4,
-    max_steps=10,
+    gradient_accumulation_steps=4,
+    optim="paged_adamw_32bit",
+    save_steps=10,
     logging_steps=1,
-    learning_rate=1e-4,
+    learning_rate=2e-4,
+    max_grad_norm=0.3,
+    max_steps=30,
+    warmup_ratio=0.03,
+    lr_scheduler_type="constant",
+    gradient_checkpointing=True,
     max_length=512,
     packing=True,
     report_to="none",  # report_to="wandb"
